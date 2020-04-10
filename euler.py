@@ -39,7 +39,6 @@ import math
 # ans = select_max_prime_number(nums, 600851475143)
 
 # problem3
-# import math
 # #試し割法
 # def trial_division(n):
 #     #素因数を格納するリスト
@@ -132,32 +131,46 @@ import math
 #     print(max)
 
 # problem9
-n = 1000
+# n = 1000
 
-seq = range(1, n+1)
-
-
-def is_pythagorean(a, b, c):
-    return a**2 + b**2 == c**2
+# seq = range(1, n+1)
 
 
-pythagorean = None
-for a in seq:
-    if(pythagorean):
-        break
-    for b in range(a+1, n+1):
-        c = n - b - a
-        if(c > b and is_pythagorean(a, b, c)):
-            pythagorean = (a, b, c)
-            break
-
-print(pythagorean)
+# def is_pythagorean(a, b, c):
+#     return a**2 + b**2 == c**2
 
 
-# def main():
-#     # pythagorean()
-#     pass
+# pythagorean = None
+# for a in seq:
+#     if(pythagorean):
+#         break
+#     for b in range(a+1, n+1):
+#         c = n - b - a
+#         if(c > b and is_pythagorean(a, b, c)):
+#             pythagorean = (a, b, c)
+#             break
+
+# print(pythagorean)
+
+# problem10
+def summarize_prime():
+    primes = [2]
+    i = 3
+    while primes[-1] < 2000000:
+        for p in primes:
+            if i % p == 0:
+                break
+            else:
+                primes.append(i)
+        i += 2
+        print(i)
+    total = sum(primes)
+    print(total)
 
 
-# if __name__ == "__main__":
-#     main()
+def main():
+    summarize_prime()
+
+
+if __name__ == "__main__":
+    main()
