@@ -401,15 +401,24 @@ from functools import reduce
 
 
 # problem15
-def lattice_paths():
-    n, r = 40, 20
-    permutation = math.factorial(n) / math.factorial(n - r)
-    answer = permutation / math.factorial(r)
-    print('answer is %d' % answer)
+# def lattice_paths():
+#     n, r = 40, 20
+#     permutation = math.factorial(n) / math.factorial(n - r)
+#     answer = permutation / math.factorial(r)
+#     print('answer is %d' % answer)
+
+# problem16
+def power_digit_sum():
+    ans = 0
+    num = 2 ** 1000
+    string_list = str(num).split()
+    for i in string_list:
+        ans += int(i)
+    print(ans)
 
 
 def main():
-    lattice_paths()
+    power_digit_sum()
 
 
 if __name__ == "__main__":
