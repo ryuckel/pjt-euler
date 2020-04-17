@@ -417,78 +417,123 @@ from functools import reduce
 #     print(ans)
 
 # problem17
-TEN = 10
-HUNDRED = 100
-THOUSAND = 1000
-WORDS = {
-    0: '',
-    1: 'one',
-    2: 'two',
-    3: 'three',
-    4: 'four',
-    5: 'five',
-    6: 'six',
-    7: 'seven',
-    8: 'eight',
-    9: 'nine',
-    TEN: 'ten',
-    11: 'eleven',
-    12: 'twelve',
-    13: 'thirteen',
-    14: 'fourteen',
-    15: 'fifteen',
-    16: 'sixteen',
-    17: 'seventeen',
-    18: 'eighteen',
-    19: 'nineteen',
-    20: 'twenty',
-    30: 'thirty',
-    40: 'forty',
-    50: 'fifty',
-    60: 'sixty',
-    70: 'seventy',
-    80: 'eighty',
-    90: 'ninety',
-    HUNDRED: 'hundred',
-    THOUSAND: 'thousand',
-}
+# TEN = 10
+# HUNDRED = 100
+# THOUSAND = 1000
+# WORDS = {
+#     0: '',
+#     1: 'one',
+#     2: 'two',
+#     3: 'three',
+#     4: 'four',
+#     5: 'five',
+#     6: 'six',
+#     7: 'seven',
+#     8: 'eight',
+#     9: 'nine',
+#     TEN: 'ten',
+#     11: 'eleven',
+#     12: 'twelve',
+#     13: 'thirteen',
+#     14: 'fourteen',
+#     15: 'fifteen',
+#     16: 'sixteen',
+#     17: 'seventeen',
+#     18: 'eighteen',
+#     19: 'nineteen',
+#     20: 'twenty',
+#     30: 'thirty',
+#     40: 'forty',
+#     50: 'fifty',
+#     60: 'sixty',
+#     70: 'seventy',
+#     80: 'eighty',
+#     90: 'ninety',
+#     HUNDRED: 'hundred',
+#     THOUSAND: 'thousand',
+# }
 
 
-def convert_to_word(num):
-    word = ''
-    # 1000 ~ 9999
-    quotient, remainder = divmod(num, THOUSAND)
-    if quotient != 0:
-        word += WORDS[quotient] + WORDS[THOUSAND]
-    # 100 ~ 999
-    quotient, remainder = divmod(remainder, HUNDRED)
-    if quotient != 0:
-        word += WORDS[quotient] + WORDS[HUNDRED]
-        if remainder != 0:
-            word += 'and'
-    # 1 ~ 20
-    if remainder < 20:
-        word += WORDS[remainder]
-    # 21 ~ 99
-    else:
-        quotient, remainder = divmod(remainder, TEN)
-        if quotient != 0:
-            word += WORDS[quotient * TEN] + WORDS[remainder]
+# def convert_to_word(num):
+#     word = ''
+#     # 1000 ~ 9999
+#     quotient, remainder = divmod(num, THOUSAND)
+#     if quotient != 0:
+#         word += WORDS[quotient] + WORDS[THOUSAND]
+#     # 100 ~ 999
+#     quotient, remainder = divmod(remainder, HUNDRED)
+#     if quotient != 0:
+#         word += WORDS[quotient] + WORDS[HUNDRED]
+#         if remainder != 0:
+#             word += 'and'
+#     # 1 ~ 20
+#     if remainder < 20:
+#         word += WORDS[remainder]
+#     # 21 ~ 99
+#     else:
+#         quotient, remainder = divmod(remainder, TEN)
+#         if quotient != 0:
+#             word += WORDS[quotient * TEN] + WORDS[remainder]
 
-    return word
+#     return word
 
 
-def number_letter_counts():
-    _len = 0
-    for i in range(1, 1001):
-        word = convert_to_word(i)
-        _len += len(word)
-        print('%d: %s' % (i, word))
-    print('answer is %d' % _len)
+# def number_letter_counts():
+#     _len = 0
+#     for i in range(1, 1001):
+#         word = convert_to_word(i)
+#         _len += len(word)
+#         print('%d: %s' % (i, word))
+#     print('answer is %d' % _len)
+
+
+# problem18
+
+def maximum_sum_1():
+    src = '''
+      75
+      95 64
+      17 47 82
+      18 35 87 10
+      20 04 82 47 65
+      19 01 23 75 03 34
+      88 02 77 73 07 63 67
+      99 65 04 28 06 16 70 92
+      41 41 26 56 83 40 80 70 33
+      41 48 72 33 47 32 37 16 94 29
+      53 71 44 65 25 43 91 52 97 51 14
+      70 11 33 28 77 73 17 78 39 68 17 57
+      91 71 52 38 17 14 91 43 58 50 27 29 48
+      63 66 04 68 89 53 67 30 73 16 69 87 40 31
+      04 62 98 27 23 09 70 98 73 93 38 53 60 04 23
+    '''
+
+    src = src.strip().split('\n')
+    src = [row.lstrip().split(' ') for row in src]
+    src = [[int(x) for x in row] for row in src]
+
+    # iterate each row
+    for row_index, row in enumerate(src):
+        if row_index == len(src) - 1:
+            break
+        # iterate each column
+        next_row = src[row_index + 1]
+        for col_index, num in enumerate(next_row):
+            # left end
+            if col_index == 0:
+                next_row[col_index] += row[0]
+            # right end
+            elif col_index == len(next_row) - 1:
+                next_row[col_index] += row[-1]
+            else:
+                next_row[col_index] += max(row[col_index - 1], row[col_index])
+
+    _sum = max(src[-1])
+    print('maximum total is %d' % _sum)
 
 
 def main():
-    number_letter_counts()
+    maximum_sum_1()
 
 
 if __name__ == "__main__":
