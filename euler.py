@@ -489,51 +489,80 @@ from functools import reduce
 
 # problem18
 
-def maximum_sum_1():
-    src = '''
-      75
-      95 64
-      17 47 82
-      18 35 87 10
-      20 04 82 47 65
-      19 01 23 75 03 34
-      88 02 77 73 07 63 67
-      99 65 04 28 06 16 70 92
-      41 41 26 56 83 40 80 70 33
-      41 48 72 33 47 32 37 16 94 29
-      53 71 44 65 25 43 91 52 97 51 14
-      70 11 33 28 77 73 17 78 39 68 17 57
-      91 71 52 38 17 14 91 43 58 50 27 29 48
-      63 66 04 68 89 53 67 30 73 16 69 87 40 31
-      04 62 98 27 23 09 70 98 73 93 38 53 60 04 23
-    '''
+# def maximum_sum_1():
+#     src = '''
+#       75
+#       95 64
+#       17 47 82
+#       18 35 87 10
+#       20 04 82 47 65
+#       19 01 23 75 03 34
+#       88 02 77 73 07 63 67
+#       99 65 04 28 06 16 70 92
+#       41 41 26 56 83 40 80 70 33
+#       41 48 72 33 47 32 37 16 94 29
+#       53 71 44 65 25 43 91 52 97 51 14
+#       70 11 33 28 77 73 17 78 39 68 17 57
+#       91 71 52 38 17 14 91 43 58 50 27 29 48
+#       63 66 04 68 89 53 67 30 73 16 69 87 40 31
+#       04 62 98 27 23 09 70 98 73 93 38 53 60 04 23
+#     '''
 
-    src = src.strip().split('\n')
-    src = [row.lstrip().split(' ') for row in src]
-    src = [[int(x) for x in row] for row in src]
+#     src = src.strip().split('\n')
+#     src = [row.lstrip().split(' ') for row in src]
+#     src = [[int(x) for x in row] for row in src]
 
-    # iterate each row
-    for row_index, row in enumerate(src):
-        if row_index == len(src) - 1:
-            break
-        # iterate each column
-        next_row = src[row_index + 1]
-        for col_index, num in enumerate(next_row):
-            # left end
-            if col_index == 0:
-                next_row[col_index] += row[0]
-            # right end
-            elif col_index == len(next_row) - 1:
-                next_row[col_index] += row[-1]
-            else:
-                next_row[col_index] += max(row[col_index - 1], row[col_index])
+#     # iterate each row
+#     for row_index, row in enumerate(src):
+#         if row_index == len(src) - 1:
+#             break
+#         # iterate each column
+#         next_row = src[row_index + 1]
+#         for col_index, num in enumerate(next_row):
+#             # left end
+#             if col_index == 0:
+#                 next_row[col_index] += row[0]
+#             # right end
+#             elif col_index == len(next_row) - 1:
+#                 next_row[col_index] += row[-1]
+#             else:
+#                 next_row[col_index] += max(row[col_index - 1], row[col_index])
 
-    _sum = max(src[-1])
-    print('maximum total is %d' % _sum)
+#     _sum = max(src[-1])
+#     print('maximum total is %d' % _sum)
+
+# problem19
+def get_days_of_month(year, month):
+    if month == 2:
+        if year % 400 != 0 and year % 4 == 0:
+            return 29
+        return 28
+    elif month in {9, 4, 6, 11}:
+        return 30
+    else:
+        return 31
+
+
+def counting_sunday():
+    total_days = 0
+    sum_of_sundays = 0
+
+    for year in range(1900, 2001):
+        for month in range(1, 13):
+            # begins with Sunday
+            if year != 1900 and total_days % 7 == 0:
+                sum_of_sundays += 1
+
+            # this month has
+            days = get_days_of_month(year, month)
+            total_days += days
+
+    print('%d Sundays fell on the first of the month during the 20th century.' %
+          sum_of_sundays)
 
 
 def main():
-    maximum_sum_1()
+    counting_sunday()
 
 
 if __name__ == "__main__":
