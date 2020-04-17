@@ -532,37 +532,46 @@ from functools import reduce
 #     print('maximum total is %d' % _sum)
 
 # problem19
-def get_days_of_month(year, month):
-    if month == 2:
-        if year % 400 != 0 and year % 4 == 0:
-            return 29
-        return 28
-    elif month in {9, 4, 6, 11}:
-        return 30
-    else:
-        return 31
+# def get_days_of_month(year, month):
+#     if month == 2:
+#         if year % 400 != 0 and year % 4 == 0:
+#             return 29
+#         return 28
+#     elif month in {9, 4, 6, 11}:
+#         return 30
+#     else:
+#         return 31
 
 
-def counting_sunday():
-    total_days = 0
-    sum_of_sundays = 0
+# def counting_sunday():
+#     total_days = 0
+#     sum_of_sundays = 0
 
-    for year in range(1900, 2001):
-        for month in range(1, 13):
-            # begins with Sunday
-            if year != 1900 and total_days % 7 == 0:
-                sum_of_sundays += 1
+#     for year in range(1900, 2001):
+#         for month in range(1, 13):
+#             # begins with Sunday
+#             if year != 1900 and total_days % 7 == 0:
+#                 sum_of_sundays += 1
 
-            # this month has
-            days = get_days_of_month(year, month)
-            total_days += days
+#             # this month has
+#             days = get_days_of_month(year, month)
+#             total_days += days
 
-    print('%d Sundays fell on the first of the month during the 20th century.' %
-          sum_of_sundays)
+#     print('%d Sundays fell on the first of the month during the 20th century.' %
+#           sum_of_sundays)
+
+# problem20
+def factorial_digit_sum():
+    ans = 0
+    num = math.factorial(100)
+    tmp = list(str(num))
+    for i in tmp:
+        ans += int(i)
+    print(ans)
 
 
 def main():
-    counting_sunday()
+    factorial_digit_sum()
 
 
 if __name__ == "__main__":
