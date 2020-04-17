@@ -408,17 +408,87 @@ from functools import reduce
 #     print('answer is %d' % answer)
 
 # problem16
-def power_digit_sum():
-    ans = 0
-    num = 2 ** 1000
-    string_list = str(num).split()
-    for i in string_list:
-        ans += int(i)
-    print(ans)
+# def power_digit_sum():
+#     ans = 0
+#     num = 2 ** 1000
+#     string_list = list(str(num))
+#     for i in string_list:
+#         ans += int(i)
+#     print(ans)
+
+# problem17
+TEN = 10
+HUNDRED = 100
+THOUSAND = 1000
+WORDS = {
+    0: '',
+    1: 'one',
+    2: 'two',
+    3: 'three',
+    4: 'four',
+    5: 'five',
+    6: 'six',
+    7: 'seven',
+    8: 'eight',
+    9: 'nine',
+    TEN: 'ten',
+    11: 'eleven',
+    12: 'twelve',
+    13: 'thirteen',
+    14: 'fourteen',
+    15: 'fifteen',
+    16: 'sixteen',
+    17: 'seventeen',
+    18: 'eighteen',
+    19: 'nineteen',
+    20: 'twenty',
+    30: 'thirty',
+    40: 'forty',
+    50: 'fifty',
+    60: 'sixty',
+    70: 'seventy',
+    80: 'eighty',
+    90: 'ninety',
+    HUNDRED: 'hundred',
+    THOUSAND: 'thousand',
+}
+
+
+def convert_to_word(num):
+    word = ''
+    # 1000 ~ 9999
+    quotient, remainder = divmod(num, THOUSAND)
+    if quotient != 0:
+        word += WORDS[quotient] + WORDS[THOUSAND]
+    # 100 ~ 999
+    quotient, remainder = divmod(remainder, HUNDRED)
+    if quotient != 0:
+        word += WORDS[quotient] + WORDS[HUNDRED]
+        if remainder != 0:
+            word += 'and'
+    # 1 ~ 20
+    if remainder < 20:
+        word += WORDS[remainder]
+    # 21 ~ 99
+    else:
+        quotient, remainder = divmod(remainder, TEN)
+        if quotient != 0:
+            word += WORDS[quotient * TEN] + WORDS[remainder]
+
+    return word
+
+
+def number_letter_counts():
+    _len = 0
+    for i in range(1, 1001):
+        word = convert_to_word(i)
+        _len += len(word)
+        print('%d: %s' % (i, word))
+    print('answer is %d' % _len)
 
 
 def main():
-    power_digit_sum()
+    number_letter_counts()
 
 
 if __name__ == "__main__":
