@@ -368,40 +368,48 @@ from functools import reduce
 #     print(result)
 
 # problem14
-def collatz(src):
-    if src % 2 == 0:
-        return src / 2
-    return 3 * src + 1
+# def collatz(src):
+#     if src % 2 == 0:
+#         return src / 2
+#     return 3 * src + 1
 
 
-def count(src, steps):
-    dest = collatz(src)
-    if dest not in steps:
-        count(dest, steps)
-    steps[src] = steps[dest] + 1
-    return steps
+# def count(src, steps):
+#     dest = collatz(src)
+#     if dest not in steps:
+#         count(dest, steps)
+#     steps[src] = steps[dest] + 1
+#     return steps
 
 
-def longest_collaz_sequence():
-    MAX = 10 ** 6
-    answer = None
-    longest_chain = 0
-    steps = {1: 1}
+# def longest_collaz_sequence():
+#     MAX = 10 ** 6
+#     answer = None
+#     longest_chain = 0
+#     steps = {1: 1}
 
-    for i in range(MAX, 1, -1):
-        if i in steps:
-            continue
-        steps = count(i, steps)
-        if steps[i] > longest_chain:
-            longest_chain = steps[i]
-            answer = i
+#     for i in range(MAX, 1, -1):
+#         if i in steps:
+#             continue
+#         steps = count(i, steps)
+#         if steps[i] > longest_chain:
+#             longest_chain = steps[i]
+#             answer = i
 
-    print('longest chain is %d, which starts with %d' %
-          (longest_chain, answer))
+#     print('longest chain is %d, which starts with %d' %
+#           (longest_chain, answer))
+
+
+# problem15
+def lattice_paths():
+    n, r = 40, 20
+    permutation = math.factorial(n) / math.factorial(n - r)
+    answer = permutation / math.factorial(r)
+    print('answer is %d' % answer)
 
 
 def main():
-    longest_collaz_sequence()
+    lattice_paths()
 
 
 if __name__ == "__main__":
