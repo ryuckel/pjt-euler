@@ -561,17 +561,75 @@ from functools import reduce
 #           sum_of_sundays)
 
 # problem20
-def factorial_digit_sum():
-    ans = 0
-    num = math.factorial(100)
-    tmp = list(str(num))
-    for i in tmp:
-        ans += int(i)
-    print(ans)
+# def factorial_digit_sum():
+#     ans = 0
+#     num = math.factorial(100)
+#     tmp = list(str(num))
+#     for i in tmp:
+#         ans += int(i)
+#     print(ans)
+
+# problem21
+
+# 約数の総和
+def sum_of_divisors(num):
+    factors = factoring(num)
+    operands = []
+    for divisor, power in factors.items():
+        operands.append(sum([divisor ** i for i in range(power + 1)]))
+    return reduce(lambda x, y: x * y, operands) + 1
+
+
+# 真約数の総和
+def sum_of_proper_divisors(num):
+    return sum_of_divisors(num) - (1 + num)
+
+
+# 素因数分解
+def factoring(num):
+    factors = {}
+    divisor = 2
+    power = 0
+    GREATEST_DIVISOR = num / 2
+    while num > 1 and divisor <= GREATEST_DIVISOR:
+        if num % divisor != 0:
+            if power != 0:
+                factors[divisor] = power
+            power = 0
+            if divisor == 2:
+                divisor += 1
+            else:
+                divisor += 2
+        else:
+            num = num / divisor
+            power += 1
+    factors[divisor] = power
+    return factors
+
+
+def amicable_numbers():
+    checked = set()
+    amicable_pairs = []
+
+    for a in range(220, 10001):
+        if a in checked:
+            continue
+        b = sum_of_proper_divisors(a)
+        if b < a or b == a:
+            continue
+        sum_b = sum_of_proper_divisors(b)
+        if sum_b == a:
+            amicable_pairs.append((a, b))
+        checked.add(a)
+        checked.add(b)
+
+    _sum = sum([sum(pair) for pair in amicable_pairs])
+    print('amicable pairs: %s' % amicable_pairs)
+    print('sum is %d' % _sum)
 
 
 def main():
-    factorial_digit_sum()
+    amicable_numbers()
 
 
 if __name__ == "__main__":
