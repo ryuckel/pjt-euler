@@ -629,22 +629,51 @@ from functools import reduce
 #     print('sum is %d' % _sum)
 
 # problem22
-def name_scores():
-    ALPHABET = {'"': 0}
-    for index, char in enumerate(list(string.ascii_uppercase)):
-        ALPHABET[char] = index + 1
+# def name_scores():
+#     ALPHABET = {'"': 0}
+#     for index, char in enumerate(list(string.ascii_uppercase)):
+#         ALPHABET[char] = index + 1
 
-    with open('./p022_names.txt', 'r') as f:
-        names = sorted(f.read().split(','))
+#     with open('./p022_names.txt', 'r') as f:
+#         names = sorted(f.read().split(','))
 
-    _sum = 0
-    for index, name in enumerate(names):
-        _sum += sum([ALPHABET[char] for char in list(name)]) * (index + 1)
+#     _sum = 0
+#     for index, name in enumerate(names):
+#         _sum += sum([ALPHABET[char] for char in list(name)]) * (index + 1)
+#     print('sum is %d' % _sum)
+
+# problem23
+def sum_of_proper_divisors(MAX):
+    sum_list = [1] * (MAX + 1)
+    for divisor in range(2, int(math.sqrt(MAX)) + 1):
+        sum_list[divisor ** 2] += divisor
+        for times in range(divisor + 1, MAX // divisor + 1):
+            sum_list[divisor * times] += divisor + times
+    return sum_list
+
+
+def is_sum_of_two_abundant_numbers(num, abundant_numbers):
+    for abundant_number in abundant_numbers:
+        if abundant_number > num / 2:
+            break
+        if (num - abundant_number) in abundant_numbers:
+            return True
+    return False
+
+
+def non_abundant_sums():
+    MAX = 28123
+    tmp = sum_of_proper_divisors(MAX)
+    abundant_numbers = set(
+        [num for num, _sum in enumerate(tmp) if _sum > num])
+    abundant_numbers.remove(0)
+    _sum = sum([num for num in range(MAX + 1)
+                if not is_sum_of_two_abundant_numbers(num, abundant_numbers)])
     print('sum is %d' % _sum)
 
 
 def main():
-    name_scores()
+    non_abundant_sums()
 
 
 if __name__ == "__main__":
