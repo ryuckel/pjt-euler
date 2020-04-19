@@ -2,6 +2,9 @@ import math
 import string
 import numpy as np
 from functools import reduce
+from itertools import permutations
+from decimal import Decimal, getcontext
+
 # problem1
 # sum = 0
 # for i in range(1000):
@@ -643,37 +646,138 @@ from functools import reduce
 #     print('sum is %d' % _sum)
 
 # problem23
-def sum_of_proper_divisors(MAX):
-    sum_list = [1] * (MAX + 1)
-    for divisor in range(2, int(math.sqrt(MAX)) + 1):
-        sum_list[divisor ** 2] += divisor
-        for times in range(divisor + 1, MAX // divisor + 1):
-            sum_list[divisor * times] += divisor + times
-    return sum_list
+# def sum_of_proper_divisors(MAX):
+#     sum_list = [1] * (MAX + 1)
+#     for divisor in range(2, int(math.sqrt(MAX)) + 1):
+#         sum_list[divisor ** 2] += divisor
+#         for times in range(divisor + 1, MAX // divisor + 1):
+#             sum_list[divisor * times] += divisor + times
+#     return sum_list
 
 
-def is_sum_of_two_abundant_numbers(num, abundant_numbers):
-    for abundant_number in abundant_numbers:
-        if abundant_number > num / 2:
-            break
-        if (num - abundant_number) in abundant_numbers:
+# def is_sum_of_two_abundant_numbers(num, abundant_numbers):
+#     for abundant_number in abundant_numbers:
+#         if abundant_number > num / 2:
+#             break
+#         if (num - abundant_number) in abundant_numbers:
+#             return True
+#     return False
+
+
+# def non_abundant_sums():
+#     MAX = 28123
+#     tmp = sum_of_proper_divisors(MAX)
+#     abundant_numbers = set(
+#         [num for num, _sum in enumerate(tmp) if _sum > num])
+#     abundant_numbers.remove(0)
+#     _sum = sum([num for num in range(MAX + 1)
+#                 if not is_sum_of_two_abundant_numbers(num, abundant_numbers)])
+#     print('sum is %d' % _sum)
+
+# problem24
+# def lexicographic_permutations():
+#     _permutations = list(permutations(range(10)))
+#     print('answer is %s' % ''.join(map(str, _permutations[999999])))
+
+# problem25
+
+# def fibonacci_number():
+#     fibonacci = [1, 1]
+#     THRESHOLD = 10 ** 999
+
+#     while True:
+#         num = fibonacci[-1] + fibonacci[-2]
+#         fibonacci.append(num)
+#         if num >= THRESHOLD:
+#             print('fibonacci number is %d, and the index is %d' %
+#                   (num, len(fibonacci)))
+#             break
+
+# problem26
+def is_divisible(target, divisors):
+    for divisor in divisors:
+        if target % divisor == 0:
             return True
     return False
 
 
-def non_abundant_sums():
-    MAX = 28123
-    tmp = sum_of_proper_divisors(MAX)
-    abundant_numbers = set(
-        [num for num, _sum in enumerate(tmp) if _sum > num])
-    abundant_numbers.remove(0)
-    _sum = sum([num for num in range(MAX + 1)
-                if not is_sum_of_two_abundant_numbers(num, abundant_numbers)])
-    print('sum is %d' % _sum)
+def prime_numbers(threshold):
+    prime_numbers = {2}
+    target = 3
+    while target < threshold:
+        if is_divisible(target, prime_numbers) is False:
+            prime_numbers.add(target)
+        target += 2
+    return prime_numbers
+
+
+def find_recurring_cycle(decimal_fraction_part, denominator):
+    recurring_cycle = []
+    for index, digit in enumerate(decimal_fraction_part):
+        recurring_cycle.append(digit)
+        length = 0
+        if len(recurring_cycle) > 1 and digit == recurring_cycle[0]:
+            length = recurring_cycle_length(
+                recurring_cycle, decimal_fraction_part, denominator)
+        if length != 0:
+            return length
+    return 0
+
+
+def recurring_cycle_length(recurring_cycle, decimal_fraction_part, denominator):
+    for index, digit in enumerate(reversed(recurring_cycle)):
+        if digit != decimal_fraction_part[denominator - 1 - index]:
+            return 0
+    print('%d: recurring cycle is %d' %
+          (denominator, len(recurring_cycle) - 1))
+    return len(recurring_cycle) - 1
+
+
+def reciprocal_cycles():
+    getcontext().prec = 1000
+    tmp = prime_numbers(1000)
+    longest_recurring_cycle = (7, 6)
+    for denominator in tmp:
+        decimal_fraction_part = list(
+            str(Decimal(1) / Decimal(denominator)).split('.')[1])
+        length = find_recurring_cycle(decimal_fraction_part, denominator)
+        if length > longest_recurring_cycle[1]:
+            longest_recurring_cycle = (denominator, length)
+    print('longest recurring cycle is %d of 1 / %d' %
+          (longest_recurring_cycle[1], longest_recurring_cycle[0]))
+
+# problem27
+
+
+def quadratic_primes():
+    tmp = prime_numbers(1000)
+    answer = {'a': 0, 'b': 0, 'n': 0}
+    for a in range(-999, 1000):
+        # if n = 0, formula produces b
+        for b in (list(tmp) + [-num for num in tmp]):
+            n = 0
+            while True:
+                num = n ** 2 + a * n + b
+                if num in tmp:
+                    n += 1
+                    continue
+                # if n = b, formula produces multiple of b
+                if n == b - 1 or is_divisible(num, tmp):
+                    if n > answer['n']:
+                        answer['a'] = a
+                        answer['b'] = b
+                        answer['n'] = n
+                    break
+                tmp.add(num)
+                n += 1
+    print('a=%d, b=%d produces %d consecutive prime numbers' %
+          (answer['a'], answer['b'], answer['n']))
+    print('product of %d and %d is %d' %
+          (answer['a'], answer['b'], answer['a'] * answer['b']))
 
 
 def main():
-    non_abundant_sums()
+    quadratic_primes()
 
 
 if __name__ == "__main__":
