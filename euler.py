@@ -1,4 +1,5 @@
 import math
+import string
 import numpy as np
 from functools import reduce
 # problem1
@@ -572,64 +573,78 @@ from functools import reduce
 # problem21
 
 # 約数の総和
-def sum_of_divisors(num):
-    factors = factoring(num)
-    operands = []
-    for divisor, power in factors.items():
-        operands.append(sum([divisor ** i for i in range(power + 1)]))
-    return reduce(lambda x, y: x * y, operands) + 1
+# def sum_of_divisors(num):
+#     factors = factoring(num)
+#     operands = []
+#     for divisor, power in factors.items():
+#         operands.append(sum([divisor ** i for i in range(power + 1)]))
+#     return reduce(lambda x, y: x * y, operands) + 1
 
 
-# 真約数の総和
-def sum_of_proper_divisors(num):
-    return sum_of_divisors(num) - (1 + num)
+# # 真約数の総和
+# def sum_of_proper_divisors(num):
+#     return sum_of_divisors(num) - (1 + num)
 
 
-# 素因数分解
-def factoring(num):
-    factors = {}
-    divisor = 2
-    power = 0
-    GREATEST_DIVISOR = num / 2
-    while num > 1 and divisor <= GREATEST_DIVISOR:
-        if num % divisor != 0:
-            if power != 0:
-                factors[divisor] = power
-            power = 0
-            if divisor == 2:
-                divisor += 1
-            else:
-                divisor += 2
-        else:
-            num = num / divisor
-            power += 1
-    factors[divisor] = power
-    return factors
+# # 素因数分解
+# def factoring(num):
+#     factors = {}
+#     divisor = 2
+#     power = 0
+#     GREATEST_DIVISOR = num / 2
+#     while num > 1 and divisor <= GREATEST_DIVISOR:
+#         if num % divisor != 0:
+#             if power != 0:
+#                 factors[divisor] = power
+#             power = 0
+#             if divisor == 2:
+#                 divisor += 1
+#             else:
+#                 divisor += 2
+#         else:
+#             num = num / divisor
+#             power += 1
+#     factors[divisor] = power
+#     return factors
 
 
-def amicable_numbers():
-    checked = set()
-    amicable_pairs = []
+# def amicable_numbers():
+#     checked = set()
+#     amicable_pairs = []
 
-    for a in range(220, 10001):
-        if a in checked:
-            continue
-        b = sum_of_proper_divisors(a)
-        if b < a or b == a:
-            continue
-        sum_b = sum_of_proper_divisors(b)
-        if sum_b == a:
-            amicable_pairs.append((a, b))
-        checked.add(a)
-        checked.add(b)
+#     for a in range(220, 10001):
+#         if a in checked:
+#             continue
+#         b = sum_of_proper_divisors(a)
+#         if b < a or b == a:
+#             continue
+#         sum_b = sum_of_proper_divisors(b)
+#         if sum_b == a:
+#             amicable_pairs.append((a, b))
+#         checked.add(a)
+#         checked.add(b)
 
-    _sum = sum([sum(pair) for pair in amicable_pairs])
-    print('amicable pairs: %s' % amicable_pairs)
+#     _sum = sum([sum(pair) for pair in amicable_pairs])
+#     print('amicable pairs: %s' % amicable_pairs)
+#     print('sum is %d' % _sum)
+
+# problem22
+def name_scores():
+    ALPHABET = {'"': 0}
+    for index, char in enumerate(list(string.ascii_uppercase)):
+        ALPHABET[char] = index + 1
+
+    with open('./p022_names.txt', 'r') as f:
+        names = sorted(f.read().split(','))
+
+    _sum = 0
+    for index, name in enumerate(names):
+        _sum += sum([ALPHABET[char] for char in list(name)]) * (index + 1)
     print('sum is %d' % _sum)
 
 
 def main():
-    amicable_numbers()
+    name_scores()
 
 
 if __name__ == "__main__":
