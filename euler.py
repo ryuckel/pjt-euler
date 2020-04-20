@@ -4,6 +4,7 @@ import numpy as np
 from functools import reduce
 from itertools import permutations
 from decimal import Decimal, getcontext
+from itertools import chain
 
 # problem1
 # sum = 0
@@ -775,9 +776,69 @@ def quadratic_primes():
     print('product of %d and %d is %d' %
           (answer['a'], answer['b'], answer['a'] * answer['b']))
 
+# problem28
+
+
+def diagonal_sum_of_square(s):
+    # s: square size
+    # g: greatest number of previous square
+    if s == 1:
+        return 1
+    g = (s - 2) ** 2
+    return 4 * g + 10 * (s - 1)
+
+
+def number_spiral_diagnoals():
+    square_size = range(1, 1002, 2)
+    _sum = sum([diagonal_sum_of_square(s) for s in square_size])
+    print('sum is %s' % _sum)
+
+# problem29
+
+
+def distinct_powers():
+    src = range(2, 101)
+    solutions_duplicate = chain.from_iterable(
+        [[a ** b for b in src] for a in src])
+    solutions_unique = set(solutions_duplicate)
+    print('%d distinct terms exists' % len(solutions_unique))
+
+# problem30
+
+
+def equals_power_sum(num, power, powered_digits):
+    _sum = sum([powered_digits[int(digit)] for digit in str(num)])
+    if num == _sum:
+        return True
+    return False
+
+
+def assume_threshold(power):
+    digit = 1
+    while True:
+        num = sum([9 * 10 ** (d - 1) for d in range(1, digit + 1)])
+        power_sum = 9 ** power * digit
+        if num > power_sum:
+            return power_sum
+        digit += 1
+
+
+def digit_fifth_powers():
+
+    POWER = 5
+    POWERED_DIGITS = [digit ** POWER for digit in range(10)]
+    THRESHOLD = assume_threshold(POWER)
+
+    src = range(2, THRESHOLD)
+    dest = set([num for num in src if equals_power_sum(
+        num, POWER, POWERED_DIGITS)])
+    _sum = sum(dest)
+
+    print('sum is %d' % _sum)
+
 
 def main():
-    quadratic_primes()
+    digit_fifth_powers()
 
 
 if __name__ == "__main__":
