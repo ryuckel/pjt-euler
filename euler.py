@@ -836,9 +836,30 @@ def digit_fifth_powers():
 
     print('sum is %d' % _sum)
 
+# problem31
+
+
+def count_ways(target, coins):
+    if len(coins) == 1:
+        return 1
+    count = 0
+    quotient = target // coins[0]
+    for times in range(quotient + 1):
+        count += count_ways(target - coins[0] * times, coins[1:])
+    return count
+
+
+def coin_sums():
+
+    TARGET = 200
+    COINS = [200, 100, 50, 20, 10, 5, 2, 1]
+
+    ways = count_ways(TARGET, COINS)
+    print('In total, %d ways' % ways)
+
 
 def main():
-    digit_fifth_powers()
+    coin_sums()
 
 
 if __name__ == "__main__":
