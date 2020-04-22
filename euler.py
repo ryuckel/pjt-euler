@@ -857,9 +857,58 @@ def coin_sums():
     ways = count_ways(TARGET, COINS)
     print('In total, %d ways' % ways)
 
+# problem32
+
+
+def is_prime(num):
+    for divisor in range(2, int(math.sqrt(num)) + 1):
+        if num % divisor == 0:
+            return False
+    return True
+
+
+def remain_digits(num, digits):
+    used = {digit for digit in str(num)}
+    return set([str(i) for i in digits]).difference(used)
+
+
+def is_pandigital_product(product, remain_digits):
+    _permutations = permutations(remain_digits)
+    for permutation in _permutations:
+        # 1 digit * 4 digit
+        multiplicand = int(permutation[0])
+        multiplier = int(reduce(lambda x, y: x + y, permutation[1:]))
+        if multiplicand * multiplier == product:
+            return (multiplicand, multiplier)
+        # 2 digit * 3 digit
+        multiplicand = int(reduce(lambda x, y: x + y, permutation[:2]))
+        multiplier = int(reduce(lambda x, y: x + y, permutation[2:]))
+        if multiplicand * multiplier == product:
+            return (multiplicand, multiplier)
+    return None
+
+
+def pandigital_products():
+    DIGITS = range(1, 10)
+    _sum = 0
+
+    not_prime_numbers = [num for num in range(
+        1000, 10000) if is_prime(num) is False]
+
+    for num in not_prime_numbers:
+        remain = remain_digits(num, DIGITS)
+        if len(remain) != 5:
+            continue
+        multipliers = is_pandigital_product(num, remain)
+        if multipliers is not None:
+            _sum += num
+            print('%d * %d = %d' % (multipliers[0], multipliers[1], num))
+
+    print('sum is %d' % _sum)
+
 
 def main():
-    coin_sums()
+    pandigital_products()
 
 
 if __name__ == "__main__":
