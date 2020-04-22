@@ -5,6 +5,7 @@ from functools import reduce
 from itertools import permutations
 from decimal import Decimal, getcontext
 from itertools import chain
+from fractions import Fraction
 
 # problem1
 # sum = 0
@@ -906,9 +907,47 @@ def pandigital_products():
 
     print('sum is %d' % _sum)
 
+# problem33
+
+
+def cancel(numerator, denominator):
+    numerator_str = str(numerator)
+    denominator_str = str(denominator)
+
+    # trivial examples
+    if numerator_str[1] == '0' or denominator_str[1] == '0':
+        return False
+
+    original_fraction = Fraction(numerator, denominator)
+
+    # 10c + n / 10d + c
+    if numerator_str[0] == denominator_str[1]:
+        if int(denominator_str[0]) <= int(denominator_str[1]):
+            return False
+        if Fraction(int(numerator_str[1]), int(denominator_str[0])) == original_fraction:
+            return True
+    # 10n + c / 10c + d
+    if numerator_str[1] == denominator_str[0]:
+        if int(numerator_str[1]) <= int(numerator_str[0]):
+            return False
+        if Fraction(int(numerator_str[0]), int(denominator_str[1])) == original_fraction:
+            return True
+
+    return False
+
+
+def digit_cancelling_fractions():
+    src = range(10, 100)
+    dest = [[(numerator, denominator) for numerator in src[:index] if cancel(
+        numerator, denominator) is True] for index, denominator in enumerate(src)]
+    dest = chain.from_iterable(dest)
+    _product = reduce(lambda x, y: x * y,
+                      [Fraction(fraction[0], fraction[1]) for fraction in dest])
+    print('product is %s' % _product)
+
 
 def main():
-    pandigital_products()
+    digit_cancelling_fractions()
 
 
 if __name__ == "__main__":
