@@ -1068,8 +1068,33 @@ def circular_primes():
     print('answer is %d' % _count)
 
 
+# problem36
+def binary_palindromic(num):
+    binary_num = int(bin(num).replace('0b', ''))
+    return is_palindromic(binary_num)
+
+
+def is_palindromic(num):
+    digit_list = list(str(num))
+    if len(digit_list) == 1:
+        return True
+    head_half = digit_list[:len(digit_list) // 2]
+    compared = [digit for index, digit in enumerate(
+        head_half) if digit == digit_list[-(index + 1)]]
+    if len(compared) == len(head_half):
+        return True
+    return False
+
+
+def double_base_palindromes():
+    THRESHOLD = 10 ** 6
+    _sum = sum([num for num in range(1, THRESHOLD, 2)
+                if is_palindromic(num) and binary_palindromic(num)])
+    print('sum is %d' % _sum)
+
+
 def main():
-    circular_primes()
+    double_base_palindromes()
 
 
 if __name__ == "__main__":
