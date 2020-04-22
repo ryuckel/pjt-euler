@@ -3,9 +3,11 @@ import string
 import numpy as np
 from functools import reduce
 from itertools import permutations
+from itertools import combinations_with_replacement
 from decimal import Decimal, getcontext
 from itertools import chain
 from fractions import Fraction
+from math import factorial
 
 # problem1
 # sum = 0
@@ -945,9 +947,62 @@ def digit_cancelling_fractions():
                       [Fraction(fraction[0], fraction[1]) for fraction in dest])
     print('product is %s' % _product)
 
+# problem34
+
+
+def assume_threshold():
+    digit = 1
+    while True:
+        num = sum([9 * 10 ** (d - 1) for d in range(1, digit + 1)])
+        factorial_sum = factorial(9) * digit
+        if num > factorial_sum:
+            return digit
+        digit += 1
+
+
+def factorial_sum_equal(digit_list, factorial_sum, zero_count):
+    for digit in str(factorial_sum):
+        if int(digit) in digit_list:
+            digit_list.remove(int(digit))
+        else:
+            return False
+    if len(digit_list) != 0:
+        return False
+    return True
+
+
+def digit_factorials():
+    FACTORIALS = {digit: factorial(digit) for digit in range(10)}
+    THRESHOLD = assume_threshold()
+    combinations = combinations_with_replacement(range(10), THRESHOLD)
+    dest = set()
+
+    for combi in combinations:
+        zero_count = ''.join(map(str, combi)).count('0')
+        # how many digit '0' original number includes
+        for z in range(zero_count + 1):
+            # add sum of zero factorial
+            factorial_sum = sum([FACTORIALS[digit]
+                                 for digit in combi if digit != 0]) + z
+
+            # Note: as 1! = 1 and 2! = 2 are not sums they are not included.
+            if factorial_sum in (0, 1, 2):
+                continue
+
+            # adjust the number of digit '0'
+            digit_list = [digit for digit in combi if digit != 0]
+            digit_list += [0 for i in range(z)]
+
+            equals = factorial_sum_equal(digit_list, factorial_sum, z)
+            if equals is True:
+                dest.add(factorial_sum)
+
+    print('Numbers: %s' % dest)
+    print('sum is %d' % sum(dest))
+
 
 def main():
-    digit_cancelling_fractions()
+    digit_factorials()
 
 
 if __name__ == "__main__":
