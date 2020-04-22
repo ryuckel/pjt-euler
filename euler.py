@@ -1001,8 +1001,75 @@ def digit_factorials():
     print('sum is %d' % sum(dest))
 
 
+# problem35
+
+def is_divisible(target, divisors):
+    upper_bound = math.sqrt(target)
+    for divisor in divisors:
+        if divisor > upper_bound:
+            break
+        if target % divisor == 0:
+            return True
+    return False
+
+
+def prime_numbers(threshold):
+    prime_numbers = [2]
+    target = 3
+    while target < threshold:
+        if is_divisible(target, prime_numbers) is False:
+            prime_numbers.append(target)
+        target += 2
+    return set(prime_numbers)
+
+
+def check_circular_prime(num, digit_list, checked, prime_numbers):
+    _count = 1
+
+    head = digit_list.pop(0)
+    digit_list.append(head)
+
+    while True:
+        shifted_num = int(''.join(map(str, digit_list)))
+
+        if shifted_num == num:
+            return _count
+
+        checked.add(shifted_num)
+
+        if shifted_num not in prime_numbers:
+            return 0
+
+        _count += 1
+        head = digit_list.pop(0)
+        digit_list.append(head)
+
+
+def circular_primes():
+    THRESHOLD = 10 ** 6
+    prime_number_list = prime_numbers(THRESHOLD)
+
+    NOT_PRIME_DIGITS = {0, 2, 4, 5, 6, 8}
+    checked = set()
+    _count = 2  # initialized for 2 and 5
+
+    for num in prime_number_list:
+        digit_list = [int(digit) for digit in str(num)]
+
+        if len(set(digit_list).intersection(NOT_PRIME_DIGITS)) != 0:
+            continue
+
+        if num in checked:
+            continue
+
+        _count += check_circular_prime(num,
+                                       digit_list, checked, prime_number_list)
+
+    print('answer is %d' % _count)
+
+
 def main():
-    digit_factorials()
+    circular_primes()
 
 
 if __name__ == "__main__":
