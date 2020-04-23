@@ -1092,9 +1092,104 @@ def double_base_palindromes():
                 if is_palindromic(num) and binary_palindromic(num)])
     print('sum is %d' % _sum)
 
+# problem37
+
+
+def is_prime(target, divisors):
+    upper_bound = int(math.sqrt(target))
+    for divisor in divisors:
+        if divisor > upper_bound:
+            break
+        if target % divisor == 0:
+            return False
+    return True
+
+
+def is_truncatable_prime(num, prime_numbers):
+
+    str_num = str(num)
+
+    # right to left NG
+    for digit in ['2', '4', '5', '6', '8']:
+        if digit in str_num[1:]:
+            return False
+    if str_num[0] in ['1', '4', '6', '8', '9']:
+        return False
+
+    # left to right
+    for i in range(len(str_num) - 1):
+        truncated_num = str_num[i + 1:]
+        if int(truncated_num) not in prime_numbers:
+            return False
+
+    # right to left
+    for i in range(len(str_num) - 1):
+        truncated_num = str_num[:len(str_num) - (i + 1)]
+        if int(truncated_num) not in prime_numbers:
+            return False
+
+    return True
+
+
+def truncatable_primes():
+    prime_numbers = [2]
+    num = 3
+    NOT_TRUNCATABLE_PRIMES = {2, 3, 5, 7}
+    truncatable_primes = []
+
+    while len(truncatable_primes) != 11:
+        if is_prime(num, prime_numbers):
+            prime_numbers.append(num)
+            if num not in NOT_TRUNCATABLE_PRIMES and is_truncatable_prime(num, prime_numbers):
+                truncatable_primes.append(num)
+                print(num)
+        num += 2
+
+    print('sum is %d' % sum(truncatable_primes))
+
+
+# problem38
+def is_pandigital(num):
+    digit_list = set(list(str(num)))
+    return len(digit_list) == len(str(num))
+
+
+def multiply(num):
+    _length = 0
+    _products = []
+    for n in range(1, 10):
+        _product = num * n
+        # check product contains digit 0
+        if str(_product).find('0') != -1:
+            return None
+        # check each product pandigital
+        if is_pandigital(_product) is False:
+            return None
+        _length += len(str(_product))
+        _products.append(_product)
+        if _length >= 9:
+            break
+    if _length != 9:
+        return None
+    return _products
+
+
+def pandigital_multiples():
+    UPPER_BOUND = 10 ** 5
+    largest = 0
+
+    for num in range(1, UPPER_BOUND):
+        _products = multiply(num)
+        if _products is not None:
+            concatenated = reduce(lambda x, y: x + y, map(str, _products))
+            if is_pandigital(concatenated):
+                largest = max(largest, int(concatenated))
+
+    print('answer is %d' % largest)
+
 
 def main():
-    double_base_palindromes()
+    pandigital_multiples()
 
 
 if __name__ == "__main__":
