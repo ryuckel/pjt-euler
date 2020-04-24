@@ -863,89 +863,89 @@ def coin_sums():
 # problem32
 
 
-def is_prime(num):
-    for divisor in range(2, int(math.sqrt(num)) + 1):
-        if num % divisor == 0:
-            return False
-    return True
+# def is_prime(num):
+#     for divisor in range(2, int(math.sqrt(num)) + 1):
+#         if num % divisor == 0:
+#             return False
+#     return True
 
 
-def remain_digits(num, digits):
-    used = {digit for digit in str(num)}
-    return set([str(i) for i in digits]).difference(used)
+# def remain_digits(num, digits):
+#     used = {digit for digit in str(num)}
+#     return set([str(i) for i in digits]).difference(used)
 
 
-def is_pandigital_product(product, remain_digits):
-    _permutations = permutations(remain_digits)
-    for permutation in _permutations:
-        # 1 digit * 4 digit
-        multiplicand = int(permutation[0])
-        multiplier = int(reduce(lambda x, y: x + y, permutation[1:]))
-        if multiplicand * multiplier == product:
-            return (multiplicand, multiplier)
-        # 2 digit * 3 digit
-        multiplicand = int(reduce(lambda x, y: x + y, permutation[:2]))
-        multiplier = int(reduce(lambda x, y: x + y, permutation[2:]))
-        if multiplicand * multiplier == product:
-            return (multiplicand, multiplier)
-    return None
+# def is_pandigital_product(product, remain_digits):
+#     _permutations = permutations(remain_digits)
+#     for permutation in _permutations:
+#         # 1 digit * 4 digit
+#         multiplicand = int(permutation[0])
+#         multiplier = int(reduce(lambda x, y: x + y, permutation[1:]))
+#         if multiplicand * multiplier == product:
+#             return (multiplicand, multiplier)
+#         # 2 digit * 3 digit
+#         multiplicand = int(reduce(lambda x, y: x + y, permutation[:2]))
+#         multiplier = int(reduce(lambda x, y: x + y, permutation[2:]))
+#         if multiplicand * multiplier == product:
+#             return (multiplicand, multiplier)
+#     return None
 
 
-def pandigital_products():
-    DIGITS = range(1, 10)
-    _sum = 0
+# def pandigital_products():
+#     DIGITS = range(1, 10)
+#     _sum = 0
 
-    not_prime_numbers = [num for num in range(
-        1000, 10000) if is_prime(num) is False]
+#     not_prime_numbers = [num for num in range(
+#         1000, 10000) if is_prime(num) is False]
 
-    for num in not_prime_numbers:
-        remain = remain_digits(num, DIGITS)
-        if len(remain) != 5:
-            continue
-        multipliers = is_pandigital_product(num, remain)
-        if multipliers is not None:
-            _sum += num
-            print('%d * %d = %d' % (multipliers[0], multipliers[1], num))
+#     for num in not_prime_numbers:
+#         remain = remain_digits(num, DIGITS)
+#         if len(remain) != 5:
+#             continue
+#         multipliers = is_pandigital_product(num, remain)
+#         if multipliers is not None:
+#             _sum += num
+#             print('%d * %d = %d' % (multipliers[0], multipliers[1], num))
 
-    print('sum is %d' % _sum)
+#     print('sum is %d' % _sum)
 
 # problem33
 
 
-def cancel(numerator, denominator):
-    numerator_str = str(numerator)
-    denominator_str = str(denominator)
+# def cancel(numerator, denominator):
+#     numerator_str = str(numerator)
+#     denominator_str = str(denominator)
 
-    # trivial examples
-    if numerator_str[1] == '0' or denominator_str[1] == '0':
-        return False
+#     # trivial examples
+#     if numerator_str[1] == '0' or denominator_str[1] == '0':
+#         return False
 
-    original_fraction = Fraction(numerator, denominator)
+#     original_fraction = Fraction(numerator, denominator)
 
-    # 10c + n / 10d + c
-    if numerator_str[0] == denominator_str[1]:
-        if int(denominator_str[0]) <= int(denominator_str[1]):
-            return False
-        if Fraction(int(numerator_str[1]), int(denominator_str[0])) == original_fraction:
-            return True
-    # 10n + c / 10c + d
-    if numerator_str[1] == denominator_str[0]:
-        if int(numerator_str[1]) <= int(numerator_str[0]):
-            return False
-        if Fraction(int(numerator_str[0]), int(denominator_str[1])) == original_fraction:
-            return True
+#     # 10c + n / 10d + c
+#     if numerator_str[0] == denominator_str[1]:
+#         if int(denominator_str[0]) <= int(denominator_str[1]):
+#             return False
+#         if Fraction(int(numerator_str[1]), int(denominator_str[0])) == original_fraction:
+#             return True
+#     # 10n + c / 10c + d
+#     if numerator_str[1] == denominator_str[0]:
+#         if int(numerator_str[1]) <= int(numerator_str[0]):
+#             return False
+#         if Fraction(int(numerator_str[0]), int(denominator_str[1])) == original_fraction:
+#             return True
 
-    return False
+#     return False
 
 
-def digit_cancelling_fractions():
-    src = range(10, 100)
-    dest = [[(numerator, denominator) for numerator in src[:index] if cancel(
-        numerator, denominator) is True] for index, denominator in enumerate(src)]
-    dest = chain.from_iterable(dest)
-    _product = reduce(lambda x, y: x * y,
-                      [Fraction(fraction[0], fraction[1]) for fraction in dest])
-    print('product is %s' % _product)
+# def digit_cancelling_fractions():
+#     src = range(10, 100)
+#     dest = [[(numerator, denominator) for numerator in src[:index] if cancel(
+#         numerator, denominator) is True] for index, denominator in enumerate(src)]
+#     dest = chain.from_iterable(dest)
+#     _product = reduce(lambda x, y: x * y,
+#                       [Fraction(fraction[0], fraction[1]) for fraction in dest])
+#     print('product is %s' % _product)
 
 # problem34
 
@@ -1242,9 +1242,40 @@ def champernowne_constant():
                       [int(concatenated[10 ** i - 1]) for i in range(7)])
     print('answer is %d' % _product)
 
+# problem41
+
+
+def is_prime(target):
+    upper_bound = int(math.sqrt(target))
+    num = 3
+    while num < upper_bound:
+        if target % num == 0:
+            return False
+        num += 2
+    return True
+
+
+def largest_pandigital_prime(digit):
+    _permutations = permutations(range(digit, 0, -1))
+    for permutation in _permutations:
+        if permutation[-1] in {2, 4, 5, 6, 8}:
+            continue
+        num = int(''.join(map(str, permutation)))
+        if is_prime(num):
+            return num
+    return None
+
+
+def pandigital_prime():
+    for n in range(9, 1, -1):
+        num = largest_pandigital_prime(n)
+        if num is not None:
+            print('answer is %d' % num)
+            break
+
 
 def main():
-    champernowne_constant()
+    pandigital_prime()
 
 
 if __name__ == "__main__":
