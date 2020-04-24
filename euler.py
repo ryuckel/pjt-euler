@@ -1227,8 +1227,24 @@ def integer_right_triangles():
           sorted(solutions.items(), key=lambda x: x[1])[-1][0])
 
 
+def champernowne_constant():
+
+    num = 1
+    concatenated = ''
+
+    while True:
+        concatenated += str(num)
+        if len(concatenated) > 10 ** 6:
+            break
+        num += 1
+
+    _product = reduce(lambda x, y: x * y,
+                      [int(concatenated[10 ** i - 1]) for i in range(7)])
+    print('answer is %d' % _product)
+
+
 def main():
-    integer_right_triangles()
+    champernowne_constant()
 
 
 if __name__ == "__main__":
