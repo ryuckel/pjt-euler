@@ -1343,8 +1343,40 @@ def substring_divisibility():
     print('sum is %d' % sum(target))
 
 
+def pentagonal_number(n):
+    return n * (3 * n - 1) // 2
+
+
+def is_pentagonal(num):
+    return (math.sqrt(24 * num + 1) + 1) % 6.0 == 0
+
+
+def find_pair(Pk, pentagonal_numbers):
+    for Pj in pentagonal_numbers[::-1]:
+        _sum = Pk + Pj
+        _diff = Pk - Pj
+        if is_pentagonal(_sum) and _diff in pentagonal_numbers:
+            return _diff
+    return None
+
+
+def pentagon_numbers():
+    k = 1
+    D = None
+    pentagonal_numbers = []
+
+    while D is None:
+        Pk = pentagonal_number(k)
+        pentagonal_numbers.append(Pk)
+        D = find_pair(Pk, pentagonal_numbers)
+        if D is not None:
+            print('k=%d, j=%d' % (k, pentagonal_numbers.index(Pk - D) + 1))
+            print('D is %d' % D)
+        k += 1
+
+
 def main():
-    substring_divisibility()
+    pentagon_numbers()
 
 
 if __name__ == "__main__":
