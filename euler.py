@@ -1274,8 +1274,77 @@ def pandigital_prime():
             break
 
 
+# problem42
+def triangle_numbers(threshold):
+    n = 1
+    tn = []
+    while True:
+        num = n * (n + 1) // 2
+        if num > threshold:
+            return tn
+        tn.append(num)
+        n += 1
+
+
+def coded_triangle_numbers():
+    ALPHABETS = {letter: index + 1 for index,
+                 letter in enumerate(list(string.ascii_uppercase))}
+
+    with open('./p042_words.txt') as f:
+        words = f.read().replace('"', '').split(',')
+
+    letter_sum = [sum([ALPHABETS[letter] for letter in word])
+                  for word in words]
+    _triangle_numbers = triangle_numbers(max(letter_sum))
+    triangle_words = [_sum for _sum in letter_sum if _sum in _triangle_numbers]
+
+    print('answer is %d' % len(triangle_words))
+
+# problem43
+
+
+def convert_list_to_int(_list):
+    return int(''.join(map(str, _list)))
+
+
+def pre_check(digit_list):
+    # non leading 0
+    if digit_list[0] == 0:
+        return False
+    # divisble by even number
+    if digit_list[3] not in {0, 2, 4, 6, 8}:
+        return False
+    # divisible by 5
+    if digit_list[5] != 5:
+        return False
+    return True
+
+
+def is_divisible(digit_list):
+    DIVISORS = [17, 13, 11, 7, 5, 3, 2]
+    offset = len(digit_list)
+    for index, divisor in enumerate(DIVISORS):
+        sub = convert_list_to_int(
+            digit_list[offset - index - 3:offset - index])
+        if sub % divisor != 0:
+            return False
+    return True
+
+
+def substring_divisibility():
+    src = list(permutations(range(10)))
+    target = set()
+
+    for digit_list in src:
+        if pre_check(digit_list) and is_divisible(digit_list):
+            num = convert_list_to_int(digit_list)
+            target.add(int(num))
+
+    print('sum is %d' % sum(target))
+
+
 def main():
-    pandigital_prime()
+    substring_divisibility()
 
 
 if __name__ == "__main__":
