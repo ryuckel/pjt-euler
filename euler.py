@@ -1,8 +1,8 @@
-import math
+from math import sqrt
 import string
 import numpy as np
 from functools import reduce
-from itertools import permutations
+from itertools import permutations, combinations
 from itertools import combinations_with_replacement
 from decimal import Decimal, getcontext
 from itertools import chain
@@ -1489,9 +1489,69 @@ def distinct_primes_factors():
                 break
         num += 1
 
+# problem48
+
+
+def self_powers():
+    _sum = sum([num ** num for num in range(1, 1000)])
+    print('last ten disits are %s' % str(_sum)[-10:])
+
+# problem49
+
+
+def is_divisible(target, divisors):
+    upper_bound = sqrt(target)
+    for divisor in divisors:
+        if divisor > upper_bound:
+            break
+        if target % divisor == 0:
+            return True
+    return False
+
+
+def prime_numbers(threshold):
+    prime_numbers = [2]
+    target = 3
+    while target < threshold:
+        if is_divisible(target, prime_numbers) is False:
+            prime_numbers.append(target)
+        target += 2
+    return prime_numbers
+
+
+def make_candidates(num, primes):
+    _permutations = permutations(list(str(num)))
+    candidates = set()
+    for permutation in _permutations:
+        new_num = int(''.join(map(str, permutation)))
+        if new_num in primes:
+            candidates.add(new_num)
+            primes.remove(new_num)
+    return candidates
+
+
+def find_sequence(candidates):
+    candidates = sorted(list(candidates))
+    _combinations = combinations(candidates, 3)
+    for combination in _combinations:
+        if combination[1] - combination[0] == combination[2] - combination[1]:
+            return combination
+    return None
+
+
+def prime_permutations():
+
+    primes = list(filter(lambda x: x > 1000, prime_numbers(10000)))
+
+    for prime in primes:
+        candidates = make_candidates(prime, primes)
+        sequence = find_sequence(candidates)
+        if sequence is not None:
+            print(sequence)
+
 
 def main():
-    distinct_primes_factors()
+    prime_permutations()
 
 
 if __name__ == "__main__":
