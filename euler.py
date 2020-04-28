@@ -1394,9 +1394,47 @@ def triangular_pentagonal_hexagonal():
             break
         n += 1
 
+# problem46
+
+
+def is_prime(num, primes):
+    upper_bound = int(math.sqrt(num))
+    for divisor in primes:
+        if divisor > upper_bound:
+            return True
+        if num % divisor == 0:
+            return False
+    return True
+
+
+def goldbach(num, primes):
+    for prime in primes:
+        root = math.sqrt((num - prime) // 2)
+        if root - int(root) == 0:
+            print('%d = %d + 2 * %d^2' % (num, prime, root))
+            return True
+    return False
+
+
+def goldenbachs_other_conjecture():
+    primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
+    num = 35
+
+    while True:
+        # prime
+        if is_prime(num, primes):
+            primes.append(num)
+            num += 2
+            continue
+        # composite
+        if goldbach(num, primes[1:]) is False:
+            print('answer is %d' % num)
+            break
+        num += 2
+
 
 def main():
-    triangular_pentagonal_hexagonal()
+    goldenbachs_other_conjecture()
 
 
 if __name__ == "__main__":
