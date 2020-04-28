@@ -1374,9 +1374,29 @@ def pentagon_numbers():
             print('D is %d' % D)
         k += 1
 
+# problem45
+
+
+def is_pentagonal(num):
+    return (math.sqrt(24 * num + 1) + 1) % 6.0 == 0
+
+
+def hexagonal_number(n):
+    return n * (2 * n - 1)
+
+
+def triangular_pentagonal_hexagonal():
+    n = 144
+    while True:
+        hexagonal = hexagonal_number(n)
+        if is_pentagonal(hexagonal):
+            print('H%d: %d' % (n, hexagonal))
+            break
+        n += 1
+
 
 def main():
-    pentagon_numbers()
+    triangular_pentagonal_hexagonal()
 
 
 if __name__ == "__main__":
